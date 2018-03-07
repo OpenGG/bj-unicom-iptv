@@ -1,0 +1,19 @@
+{
+  "name": "bj-unicom-iptv",
+  "version": "1.0.0",
+  "description": "Beijing unicom IPTV playlist\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[U",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OpenGG/bj-unicom-iptv.git"
+  },
+  "author": "OpenGG",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/OpenGG/bj-unicom-iptv/issues"
+  },
+  "homepage": "https://github.com/OpenGG/bj-unicom-iptv#readme"
+}
