@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Beijing Unicom IPTV channel list</title>
+  <title>Beijing Unicom IPTV playlist</title>
 
   <style>
     table {
@@ -17,24 +17,45 @@
       border: 1px solid #000;
       padding: 5px 10px;
     }
+
+    .form {
+      padding: 10px 0;
+    }
+
+    label {
+      display: block;
+      padding: 10px 0;
+    }
+
+    .input-proxy {
+      width: 300px;
+    }
+
+    .btn-download {
+      padding: 5px 10px;
+    }
   </style>
 </head>
 
 <body>
+  <h1>Beijing Unicom IPTV playlist</h1>
 
-  <div id="app">
-    <label>
-      udpxy proxy:
-      <input v-model="proxy" placeholder="Your udpxy address, e.g. http://192.168.1.4:8012/">
+  <div id="app" v-cloak>
+    <div class="form">
+      <label>
+        udpxy proxy:
+        <input class="input-proxy" v-model="proxy" placeholder="Your udpxy address, e.g. http://192.168.1.4:8012/">
 
-      <button @click="download">download</button>
-    </label>
+      </label>
+
+      <button class="btn-download" @click="download">Download playlist</button>
+    </div>
 
     <table>
       <tr>
         <th>name</th>
         <th>address</th>
-        <th>play</th>
+        <th>udpxy address</th>
       </tr>
       <tr v-for="channel in channels">
         <td>{{channel.name}}</td>
@@ -49,6 +70,8 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
   <script>
+    const defaultProxy = 'http://192.168.1.4:8012/';
+
     const parseChannels = str => {
       const ret = [];
 
@@ -90,7 +113,7 @@
       },
       methods: {
         formatWithProxy(address) {
-          const proxy = this.proxy.replace(/\/+$/, '');
+          const proxy = (this.proxy || defaultProxy).replace(/\/+$/, '');
           return address.replace(/^\w+:\/\//, `${proxy}/rtp/`);
         },
         download() {
