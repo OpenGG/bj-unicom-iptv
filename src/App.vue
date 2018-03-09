@@ -1,18 +1,16 @@
 <template>
   <div id="app">
-    <Form
-      :label-width="50"
+    <div
+      class="form"
     >
-      <FormItem
-        label="udpxy"
-      >
+      <label>
+        udpxy address:
         <i-input
           class="input-udpxy"
           v-model="udpxy"
           placeholder="Your udpxy address, e.g. http://192.168.1.4:8012"
         />
-
-      </FormItem>
+      </label>
 
       <Button
         html-type="button"
@@ -32,7 +30,7 @@
         @submit="channelsHTML = arguments[0]"
         ref="modalCustom"
       />
-    </Form>
+    </div>
 
     <Table
       :loading="loading"
@@ -148,7 +146,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -157,7 +155,18 @@ export default {
   padding: 10px;
 }
 
+.form {
+  padding: 10px;
+  margin: 10px 0 20px;
+  border: 1px solid #ccc;
+}
+
 .input-udpxy {
   width: 300px;
+}
+
+label {
+  display: block;
+  padding: 20px 0;
 }
 </style>
