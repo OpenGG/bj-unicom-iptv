@@ -1,170 +1,31 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Beijing Unicom IPTV playlist</title>
-
-  <style>
-    table {
-      border-collapse: collapse;
+<!DOCTYPE html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Beijing Unicom IPTV playlist</title><style>.github-corner:hover .octo-arm {
+      animation: octocat-wave 560ms ease-in-out
     }
 
-    th,
-    td {
-      border: 1px solid #000;
-      padding: 5px 10px;
-    }
-
-    .form {
-      padding: 10px 0;
-    }
-
-    label {
-      display: block;
-      padding: 10px 0;
-    }
-
-    .input-proxy {
-      width: 300px;
-    }
-
-    .btn-download {
-      padding: 5px 10px;
-    }
-  </style>
-</head>
-
-<body>
-  <h1>Beijing Unicom IPTV playlist</h1>
-
-  <div id="app" v-cloak>
-    <div class="form">
-      <label>
-        udpxy proxy:
-        <input class="input-proxy" v-model="proxy" placeholder="Your udpxy address, e.g. http://192.168.1.4:8012/">
-
-      </label>
-
-      <button class="btn-download" @click="download">Download playlist</button>
-    </div>
-
-    <table>
-      <tr>
-        <th>name</th>
-        <th>address</th>
-        <th>udpxy address</th>
-      </tr>
-      <tr v-for="channel in channels">
-        <td>{{channel.name}}</td>
-        <td>{{channel.address}}</td>
-        <td>
-          {{formatWithProxy(channel.address)}}
-        </td>
-      </tr>
-    </table>
-  </div>
-
-  <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
-  <script>
-    const defaultProxy = 'http://192.168.1.4:8012/';
-
-    const parseChannels = str => {
-      const ret = [];
-
-      const reg = /ChannelName="([^"]+)".*?UserChannelID="([^"]+)".*?ChannelURL="([^"]+)"/g;
-
-      while (true) {
-        const matches = reg.exec(str);
-
-        if (!matches) {
-          break;
-        }
-
-        ret.push({
-          name: matches[1],
-          id: matches[2],
-          address: matches[3],
-        });
+    @keyframes octocat-wave {
+      0%,
+      100% {
+        transform: rotate(0)
       }
+      20%,
+      60% {
+        transform: rotate(-25deg)
+      }
+      40%,
+      80% {
+        transform: rotate(10deg)
+      }
+    }
 
-      return ret;
-    };
+    @media (max-width:500px) {
+      .github-corner:hover .octo-arm {
+        animation: none
+      }
+      .github-corner .octo-arm {
+        animation: octocat-wave 560ms ease-in-out
+      }
+    }
 
-    const generateM3u = (title, channels) =>
-      `#EXTM3U name="${title}"\n${
-      channels.map(({
-        name,
-        address,
-      }) => `#EXTINF:-1,${name}\n${address}`)
-        .join('\n')
-      }`;
-
-    const app = new Vue({
-      el: '#app',
-      data() {
-        return {
-          channels: [],
-          proxy: localStorage.udpxy || '',
-        };
-      },
-      methods: {
-        formatWithProxy(address) {
-          const proxy = (this.proxy || defaultProxy).replace(/\/+$/, '');
-          return address.replace(/^\w+:\/\//, `${proxy}/rtp/`);
-        },
-        download() {
-          const content = generateM3u(
-            'bj-unicom-iptv',
-            this.channels.map(({
-              name,
-              address
-            }) => ({
-              name,
-              address: this.formatWithProxy(address),
-            }))
-          );
-
-          const blob = new Blob([
-            content,
-          ]);
-
-          const a = document.createElement('a');
-          a.href = URL.createObjectURL(blob);
-
-          a.download = 'bj-unicom-iptv.m3u';
-
-          a.click();
-        }
-      },
-      watch: {
-        proxy(current) {
-          localStorage.udpxy = current;
-        },
-      },
-    });
-
-    const main = async () => {
-      const response = await axios.get('./iptv.txt');
-
-      const channels = parseChannels(response.data)
-        .sort(
-          (a, b) => parseInt(a.id, 10) - parseInt(b.id, 10)
-        );
-
-      app.channels = channels;
-
-      console.log(channels);
-    };
-
-    main()
-      .catch(e => {
-        alert(e.stack);
-      });
-  </script>
-</body>
-
-</html>
+    .page-title {
+      padding: 10px;
+    }</style><link href=/static/css/app.fd363ff0713a2ffc358272408d1e7930.css rel=stylesheet></head><body><h1 class=page-title>Beijing Unicom IPTV playlist</h1><div id=app></div><a href=https://github.com/opengg/bj-unicom-iptv class=github-corner aria-label="View source on Github" target=blank><svg width=80 height=80 viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden=true><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill=currentColor style="transform-origin: 130px 106px;" class=octo-arm></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill=currentColor class=octo-body></path></svg></a><script type=text/javascript src=/static/js/manifest.2ae2e69a05c33dfc65f8.js></script><script type=text/javascript src=/static/js/vendor.f835ee2bb9431738d68d.js></script><script type=text/javascript src=/static/js/app.353ca32c86ee5807f719.js></script></body></html>
