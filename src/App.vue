@@ -140,8 +140,6 @@ export default {
     } finally {
       this.loading = false;
     }
-
-    window.$app = this;
   },
 };
 </script>
