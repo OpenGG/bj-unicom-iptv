@@ -9,12 +9,14 @@
           class="input-udpxy"
           v-model="udpxy"
           placeholder="Your udpxy address, e.g. http://192.168.1.4:8012"
+          :disabled="loading"
         />
       </label>
 
       <Button
         html-type="button"
         @click="download"
+        :disabled="loading"
       >
         Download playlist
       </Button>
@@ -22,6 +24,7 @@
       <Button
         html-type="button"
         @click="custom"
+        :disabled="loading"
       >
         Custom channels HTML
       </Button>
@@ -79,6 +82,28 @@ export default {
         {
           title: 'udpxy url',
           key: 'udpxy',
+        },
+        {
+          title: 'Play in VLC (iOS)',
+          key: 'udpxy',
+          width: 140,
+          render: (h, params) => {
+            const {
+              row: {
+                udpxy,
+              },
+            } = params;
+
+            const scheme = `vlc-x-callback://x-callback-url/stream?url=${encodeURIComponent(udpxy)}`;
+
+            return (
+              <a
+                class="icon-vlc"
+                href={scheme}
+                title="Play in VLC (iOS)"
+              ></a>
+            );
+          },
         },
       ],
       channelsHTML: '',
@@ -166,5 +191,16 @@ export default {
 label {
   display: block;
   padding: 20px 0;
+}
+</style>
+
+<style>
+.icon-vlc {
+  display: block;
+  margin: auto;
+  width: 2.5em;
+  height: 2.5em;
+  background: url('./img/icon-vlc.svg') no-repeat;
+  background-size: cover;
 }
 </style>
