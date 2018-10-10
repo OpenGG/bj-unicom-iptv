@@ -5,16 +5,23 @@
     @on-ok="ok"
     @on-cancel="cancel"
   >
-    <Input
+    <i-input
+      v-model="value"
       class="modal-custom-textarea"
       type="textarea"
-      v-model="value"
     />
   </Modal>
 </template>
 
 <script>
+import Modal from 'iview/src/components/modal';
+import Input from 'iview/src/components/input';
+
 export default {
+  components: {
+    Modal,
+    'i-input': Input,
+  },
   data() {
     return {
       value: '',

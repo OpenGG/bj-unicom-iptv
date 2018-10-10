@@ -6,32 +6,32 @@
       <label>
         udpxy address:
         <i-input
-          class="input-udpxy"
           v-model="udpxy"
-          placeholder="Your udpxy address, e.g. http://192.168.1.4:8012"
           :disabled="loading"
+          class="input-udpxy"
+          placeholder="Your udpxy address, e.g. http://192.168.1.4:8012"
         />
       </label>
 
       <Button
+        :disabled="loading"
         html-type="button"
         @click="download"
-        :disabled="loading"
       >
         Download playlist
       </Button>
 
       <Button
+        :disabled="loading"
         html-type="button"
         @click="custom"
-        :disabled="loading"
       >
         Custom channels HTML
       </Button>
 
       <ModalCustom
-        @submit="channelsHTML = arguments[0]"
         ref="modalCustom"
+        @submit="channelsHTML = arguments[0]"
       />
     </div>
 
@@ -46,6 +46,9 @@
 <script>
 import axios from 'axios';
 
+import Input from 'iview/src/components/input';
+import Button from 'iview/src/components/button';
+import Table from 'iview/src/components/table';
 import download from './lib/download';
 
 import getOrigin from './lib/get-origin';
@@ -64,7 +67,10 @@ import ModalCustom from './components/modal-custom';
 export default {
   name: 'App',
   components: {
+    'i-input': Input,
     ModalCustom,
+    Button,
+    Table,
   },
   data() {
     return {
@@ -109,23 +115,30 @@ export default {
       channelsHTML: '',
     };
   },
+  computed: {
+    channelsFormatted() {
+      const channels = parseChannels(this.channelsHTML).sort((a, b) => parseInt(a.UserChannelID, 10) - parseInt(b.UserChannelID, 10));
+
+      return channels.map(channel => Object.assign(channel, {
+        udpxy: this.formatWithProxy(channel.ChannelURL),
+      }));
+    },
+  },
   watch: {
     udpxy(current) {
       localStorage.udpxy = current;
     },
   },
-  computed: {
-    channelsFormatted() {
-      const channels = parseChannels(this.channelsHTML).sort(
-        (a, b) => parseInt(a.UserChannelID, 10) - parseInt(b.UserChannelID, 10)
-      );
+  async mounted() {
+    try {
+      const response = await axios.get('iptv.txt');
 
-      return channels.map(channel =>
-        Object.assign(channel, {
-          udpxy: this.formatWithProxy(channel.ChannelURL),
-        })
-      );
-    },
+      this.channelsHTML = response.data;
+    } catch (e) {
+      this.$Message.error(e.message);
+    } finally {
+      this.loading = false;
+    }
   },
   methods: {
     formatWithProxy(url) {
@@ -143,28 +156,16 @@ export default {
         }) => ({
           name: ChannelName,
           url: udpxy,
-        }))
-      );
+        })));
 
       download(
         `${filename}.m3u`,
-        content
+        content,
       );
     },
     custom() {
       this.$refs.modalCustom.show(this.channelsHTML);
     },
-  },
-  async mounted() {
-    try {
-      const response = await axios.get('static/iptv.txt');
-
-      this.channelsHTML = response.data;
-    } catch (e) {
-      this.$Message.error(e.message);
-    } finally {
-      this.loading = false;
-    }
   },
 };
 </script>

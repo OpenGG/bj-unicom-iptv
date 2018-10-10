@@ -1,11 +1,11 @@
 import Vue from 'vue';
+import Message from 'iview/src/components/message';
 
-import iView from 'iview';
 import 'iview/dist/styles/iview.css';
 
 import App from './App';
 
-Vue.use(iView);
+Vue.prototype.$Message = Message;
 
 Vue.config.productionTip = false;
 
