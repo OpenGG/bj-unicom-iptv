@@ -27,6 +27,6 @@ Here is how-to:
 1. If everything works, make a pull request:
 
     * Fork and clone this project
-    * PUT *"iptv.txt"* inside `public/`
+    * Put *"iptv.txt"* inside `public/`
     * Run `git add . && git commit -m "Update iptv.txt" && git push`
     * Make a pull request on github
