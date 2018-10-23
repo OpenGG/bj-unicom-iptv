@@ -16,9 +16,10 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build:report": "vue-cli-service build --report",
+    "build:m3u": "node --experimental-modules --loader ./build/esm-loader.mjs build/build-m3u.js public/iptv.txt iptv.m3u",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "postbuild": "cp iptv.m3u docs/"
+    "postbuild": "npm run build:m3u && cp iptv.m3u docs/"
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -29,6 +30,7 @@
     "@vue/cli-plugin-babel": "^3.0.5",
     "@vue/cli-plugin-eslint": "^3.0.5",
     "@vue/cli-service": "^3.0.5",
+    "fs-extra": "^7.0.0",
     "vue-template-compiler": "^2.5.17"
   },
   "eslintConfig": {

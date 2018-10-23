@@ -51,7 +51,9 @@ import Button from 'iview/src/components/button';
 import Table from 'iview/src/components/table';
 import download from './lib/download';
 
-import getOrigin from './lib/get-origin';
+import compareChannel from './lib/compare-channel';
+
+import formatWithProxy from './lib/format-with-proxy';
 
 import generateM3u from './lib/generate-m3u';
 
@@ -117,10 +119,10 @@ export default {
   },
   computed: {
     channelsFormatted() {
-      const channels = parseChannels(this.channelsHTML).sort((a, b) => parseInt(a.UserChannelID, 10) - parseInt(b.UserChannelID, 10));
+      const channels = parseChannels(this.channelsHTML).sort(compareChannel);
 
       return channels.map(channel => Object.assign(channel, {
-        udpxy: this.formatWithProxy(channel.ChannelURL),
+        udpxy: formatWithProxy(channel.ChannelURL, this.udpxy, udpxyDefault),
       }));
     },
   },
@@ -141,13 +143,6 @@ export default {
     }
   },
   methods: {
-    formatWithProxy(url) {
-      const prefix = getOrigin(this.udpxy) || udpxyDefault;
-
-      const path = url.replace(/^\w+:\/\//, '/rtp/');
-
-      return `${prefix}${path}`;
-    },
     download() {
       const content = generateM3u(filename, this.channelsFormatted
         .map(({
